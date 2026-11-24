@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepGuard - Deepfake Detection</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/call.css">
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="brand">
+        <span class="brand-icon">◈</span>
+        <div><b>DeepGuard</b><small>VIDEO SECURITY</small></div>
+    </div>
+
+    <nav>
+        <a class="active" href="#dashboard">Dashboard</a>
+        <a href="#upload">Upload Video</a>
+        <a href="#live">Live Camera</a>
+        <a href="#call">Video Call</a>
+        <a href="#history">History</a>
+    </nav>
+
+    <div class="side-note">
+        <b>Project Status</b>
+        <span class="status-dot"></span> System Ready
+        <small>Experimental CNN model</small>
+    </div>
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+    <div>
+        <small>FINAL YEAR PROJECT / COMPUTER VISION</small>
+        <h1>Deepfake Detection System</h1>
+    </div>
+    <span class="cpu-pill">● CPU MODE</span>
+</header>
+
+<section id="dashboard" class="welcome">
+    <div>
+        <p class="eyebrow">VIDEO AUTHENTICITY WORKSPACE</p>
+        <h2>Detect. Analyze.<br><span>Communicate Safely.</span></h2>
+        <p>Analyze uploaded videos, monitor live camera frames and detect suspicious video during communication.</p>
+    </div>
+    <div class="hero-mark">◈</div>
+</section>
+
+<section class="stats">
+    <article class="stat">
+        <small>PROCESSING</small>
+        <b>CPU</b>
+        <span>Local processing</span>
+    </article>
+    <article class="stat">
+        <small>FACE DETECTOR</small>
+        <b>Ready</b>
+        <span>OpenCV</span>
+    </article>
+    <article class="stat">
+        <small>AI MODEL</small>
+        <b id="modelStatus">Checking...</b>
+        <span>CNN classifier</span>
+    </article>
+</section>
+
+<!-- 01 UPLOAD VIDEO -->
+
+<section id="upload" class="panel">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">01 / VIDEO INPUT</p>
+            <h2>Upload a Video</h2>
+        </div>
+        <span class="tag">MP4 · MOV · AVI · MKV · WEBM</span>
+    </div>
+
+    <form id="uploadForm">
+        <label class="dropzone" for="videoInput">
+            <span class="upload-icon">⇧</span>
+            <b>Choose a video file</b>
+            <span id="fileName">Select a file from your computer</span>
+            <input id="videoInput" name="video" type="file"
+                   accept="video/*" required>
+        </label>
+        <button type="submit" id="analyzeButton">
+            Inspect Video →
+        </button>
+    </form>
+
+    <div id="uploadResult" class="result hidden"></div>
+</section>
+
+<!-- 02 SINGLE PERSON LIVE CAMERA -->
+
+<section id="live" class="panel">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">02 / LIVE INPUT</p>
+            <h2>Live Camera Detection</h2>
+        </div>
+        <span class="tag">Webcam</span>
+    </div>
+
+    <div class="camera-layout">
+        <div class="camera-box">
+            <video id="camera" autoplay muted playsinline></video>
+            <div id="cameraPlaceholder">
+                Camera preview will appear here
+            </div>
+        </div>
+
+        <div class="camera-controls">
+            <button id="startCamera" type="button">Start Camera</button>
+            <button id="stopCamera" class="secondary"
+                    type="button" disabled>Stop Camera</button>
+
+            <p id="cameraStatus">Camera is stopped.</p>
+            <b id="faceCount">Faces detected: —</b>
+        </div>
+    </div>
+</section>
+
+<!-- 03 TWO PERSON WEBRTC CALL -->
+
+<section id="call" class="panel">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">03 / COMMUNICATION</p>
+            <h2>Live Video Call</h2>
+        </div>
+        <span class="tag">WebRTC</span>
+    </div>
+
+    <div class="room-panel">
+        <input id="roomInput" placeholder="Enter Room ID">
+        <button id="createRoom" type="button">Create Room</button>
+        <button id="joinRoom" class="secondary" type="button">Join Room</button>
+    </div>
+
+    <div id="roomInfo" class="room-info hidden">
+        Room ID: <strong id="roomIdDisplay"></strong>
+        <button id="copyRoom" class="secondary" type="button">Copy ID</button>
+    </div>
+
+    <div class="video-grid">
+        <div class="video-card">
+            <h3>You</h3>
+            <video id="localVideo" autoplay muted playsinline></video>
+        </div>
+
+        <div class="video-card">
+            <h3>Other Person</h3>
+            <video id="remoteVideo" autoplay playsinline></video>
+        </div>
+    </div>
+
+    <div class="call-controls">
+        <button id="cameraButton" type="button">Start Camera</button>
+        <button id="micButton" class="secondary"
+                type="button" disabled>Mute</button>
+        <button id="endCall" class="secondary"
+                type="button" disabled>End Call</button>
+    </div>
+
+    <div class="call-analysis">
+        <h3>Video Analysis</h3>
+        <h2 id="detectionLabel">Waiting for call...</h2>
+        <p>
+            <span id="realProbability">REAL: —</span>
+            &nbsp;&nbsp;
+            <span id="fakeProbability">FAKE: —</span>
+        </p>
+        <p id="detectionMessage">
+            Analysis starts when the other person joins.
+        </p>
+    </div>
+
+    <p id="connectionStatus">Not connected</p>
+    <span id="remoteStatus">Waiting for participant</span>
+</section>
+
+<!-- 04 HISTORY -->
+
+<section id="history" class="panel">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">04 / RECORDS</p>
+            <h2>Analysis History</h2>
+        </div>
+        <button id="refreshHistory" class="secondary small"
+                type="button">Refresh</button>
+    </div>
+
+    <div id="historyList" class="muted">No analyses yet.</div>
+</section>
+
+<footer>
+    DeepGuard · Final Year Project · Experimental deepfake detection
+</footer>
+
+</main>
+
+<script src="/static/script.js"></script>
+<script src="/static/call.js"></script>
+
+</body>
+</html>

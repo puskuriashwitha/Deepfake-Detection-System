@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepGuard - Secure Video Call</title>
+    <link rel="stylesheet" href="/static/call.css">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">◈ DeepGuard</div>
+        <div class="call-label">LIVE VIDEO COMMUNICATION</div>
+        <a href="/">Dashboard</a>
+    </header>
+
+    <main class="container">
+        <section class="heading">
+            <p>SECURE COMMUNICATION</p>
+            <h1>Deepfake Protected Video Call</h1>
+            <div id="connectionStatus">Not connected</div>
+        </section>
+
+        <section class="room-panel">
+            <div>
+                <label for="roomInput">Room ID</label>
+                <input id="roomInput" placeholder="Enter room ID">
+            </div>
+            <button id="createRoom">Create Room</button>
+            <button id="joinRoom" class="secondary">Join Room</button>
+        </section>
+
+        <div id="roomInfo" class="room-info hidden">
+            Room ID: <strong id="roomIdDisplay"></strong>
+            <button id="copyRoom" class="secondary">Copy ID</button>
+        </div>
+
+        <section class="video-grid">
+            <article class="video-card">
+                <div class="video-heading">
+                    <strong>You</strong>
+                    <span>Local camera</span>
+                </div>
+                <video id="localVideo" autoplay muted playsinline></video>
+            </article>
+
+            <article class="video-card">
+                <div class="video-heading">
+                    <strong>Remote participant</strong>
+                    <span id="remoteStatus">Waiting for participant</span>
+                </div>
+                <video id="remoteVideo" autoplay playsinline></video>
+            </article>
+        </section>
+
+        <section class="detection-panel">
+            <p>AI DEEPFAKE MONITORING</p>
+            <h2 id="detectionLabel">Waiting for video...</h2>
+            <div class="probabilities">
+                <span id="realProbability">REAL: —</span>
+                <span id="fakeProbability">FAKE: —</span>
+            </div>
+            <p id="detectionMessage">Detection will begin after the call connects.</p>
+            <small>Experimental CNN — predictions are not verified authenticity verdicts.</small>
+        </section>
+
+        <section class="controls">
+            <button id="cameraButton">Start Camera</button>
+            <button id="micButton" class="secondary" disabled>Mute Microphone</button>
+            <button id="endCall" class="danger" disabled>End Call</button>
+        </section>
+    </main>
+
+    <script src="/static/call.js"></script>
+</body>
+</html>
